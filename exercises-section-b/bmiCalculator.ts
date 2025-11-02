@@ -26,7 +26,7 @@ const parseBmiArguments = (args: string[]): BmiValues => {
  * @param heightCm - Height in centimeters.
  * @returns A string representing the BMI category.
  */
-const calculateBMI = (heightCm: number, weightKg: number): string => {
+export const calculateBMI = (heightCm: number, weightKg: number): string => {
     
     /// let's make crude assumptions about valid ranges
     if (heightCm <= 0 || heightCm > 300) {
@@ -60,14 +60,17 @@ const calculateBMI = (heightCm: number, weightKg: number): string => {
 };
 
 
-try {
-  const { heightCm, weightKg } = parseBmiArguments(process.argv);
-  console.log(calculateBMI(heightCm, weightKg));
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  console.log(errorMessage);
+if (require.main === module) {
+    try {
+        const { heightCm, weightKg } = parseBmiArguments(process.argv);
+        console.log(calculateBMI(heightCm, weightKg));
+    } catch (error: unknown) {
+        let errorMessage = 'Something bad happened.'
+        if (error instanceof Error) {
+            errorMessage += ' Error: ' + error.message;
+        }
+        console.log(errorMessage);
+    }
 }
+
 
