@@ -12,11 +12,11 @@ const parseBmiArguments = (args: string[]): BmiValues => {
     return {
       heightCm: Number(args[2]),
       weightKg: Number(args[3])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 
 
@@ -65,7 +65,7 @@ if (require.main === module) {
         const { heightCm, weightKg } = parseBmiArguments(process.argv);
         console.log(calculateBMI(heightCm, weightKg));
     } catch (error: unknown) {
-        let errorMessage = 'Something bad happened.'
+        let errorMessage = 'Something bad happened.';
         if (error instanceof Error) {
             errorMessage += ' Error: ' + error.message;
         }

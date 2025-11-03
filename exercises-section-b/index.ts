@@ -31,7 +31,7 @@ app.get('/bmi', (req, res) => {
             weight: weightNum,
             height: heightNum,
             bmi: bmiResult
-        })
+        });
 
     } catch (error: unknown) {
         return res.status(400).json({ error: error });

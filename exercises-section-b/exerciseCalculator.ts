@@ -24,11 +24,11 @@ const parseExerciseArguments = (args: string[]): exerciseArgs => {
     return {
       dailyHours: exerciseArgs.slice(1).map(Number),
       target: Number(exerciseArgs[0])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 
 
@@ -50,7 +50,7 @@ const calculateExercises = (dailyExerciseHours: number[], target: number): Exerc
         "Increase exercise",
         "Activity detected, but target not reached.",
         "Target reached. Maintain or decrease exercise"
-    ]
+    ];
 
     return {
         periodLength: dailyExerciseHours.length,
@@ -60,17 +60,17 @@ const calculateExercises = (dailyExerciseHours: number[], target: number): Exerc
         ratingDescription: ratings[rating - 1],
         target: target,
         average: avgTime
-    }
+    };
 
 
-}
+};
 
 
 try {
   const { dailyHours, target } = parseExerciseArguments(process.argv);
   console.log(calculateExercises(dailyHours, target));
 } catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
     errorMessage += ' Error: ' + error.message;
   }
