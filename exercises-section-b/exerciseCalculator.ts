@@ -32,7 +32,7 @@ const parseExerciseArguments = (args: string[]): exerciseArgs => {
 
 
 
-const calculateExercises = (dailyExerciseHours: number[], target: number): ExerciseResult => {
+export const calculateExercises = (dailyExerciseHours: number[], target: number): ExerciseResult => {
     // Target cannot be less than or equal to 0 or greater than 24
     if (target <= 0 || target > 24) {
         throw new Error("Target must be between 0 and 24 hours.");
@@ -66,13 +66,15 @@ const calculateExercises = (dailyExerciseHours: number[], target: number): Exerc
 };
 
 
-try {
-  const { dailyHours, target } = parseExerciseArguments(process.argv);
-  console.log(calculateExercises(dailyHours, target));
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.';
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
+if (require.main === module) {
+  try {
+    const { dailyHours, target } = parseExerciseArguments(process.argv);
+    console.log(calculateExercises(dailyHours, target));
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
