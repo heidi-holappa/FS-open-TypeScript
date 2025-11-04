@@ -25,6 +25,9 @@
     "typescript-eslint": "^7.2.0"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "@types/cors": "^2.8.19",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "package": "^1.0.1"
   }
 }
