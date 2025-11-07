@@ -1,3 +1,9 @@
+
+import { z } from 'zod';
+import { NewEntrySchema } from './utils';
+import { NewPatientEntrySchema } from './util/patientUtil';
+
+
 export enum Weather {
   Sunny = 'sunny',
   Rainy = 'rainy',
@@ -44,7 +50,9 @@ export interface PatientEntry {
 
 
 export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
-export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
+// infer the type from schema
+export type NewDiaryEntry = z.infer<typeof NewEntrySchema>; 
 
 export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
-export type NewPatientEntry = Omit<PatientEntry, 'id'>;
+// export type NewPatientEntry = Omit<PatientEntry, 'id'>;
+export type NewPatientEntry = z.infer<typeof NewPatientEntrySchema>;

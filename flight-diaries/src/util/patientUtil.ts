@@ -1,9 +1,18 @@
+import { z } from 'zod';
 import { FinnishSSN } from 'finnish-ssn';
 
 import { 
     NewPatientEntry,
     Gender
 } from "../types";
+
+export const NewPatientEntrySchema = z.object({
+    name: z.string(),
+    dateOfBirth: z.iso.date(),
+    ssn: z.string(),
+    gender: z.enum(Gender),
+    occupation: z.string()
+});
 
 
 const toNewPatientEntry = (object: unknown): NewPatientEntry => {
@@ -77,4 +86,6 @@ const isGender = (param: string): param is Gender => {
 };
 
 
-export default toNewPatientEntry;
+export default {
+    toNewPatientEntry
+};
