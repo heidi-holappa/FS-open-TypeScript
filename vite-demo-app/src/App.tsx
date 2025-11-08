@@ -23,7 +23,12 @@ interface CoursePartBackground extends CoursePartWithDescription {
   kind: "background"
 }
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+interface CoursePartWithRequirements extends CoursePartWithDescription {
+  requirements: string[];
+  kind: "special";
+}
+
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartWithRequirements;
 
 
 /**
@@ -60,13 +65,21 @@ const Part = ({part}: { part: CoursePart}) => {
             <p><b>Background material:</b> {part.backgroundMaterial}</p>
           </div>
         );
+      case "special":
+        return (
+          <div>
+            <p><b>Course description:</b > <i>{part.description}</i></p>
+            <p><b>Required skills:</b > <i>{part.requirements.join(", ")}</i></p>
+
+          </div>
+        );
 
       default:
         return assertNever(part);
     }
   })(); // <-- IIEF
 
-  return <p>{basePart}{extensionPart}</p>;
+  return <div>{basePart}{extensionPart}</div>;
   
 }
 
@@ -141,6 +154,13 @@ const App = () => {
       exerciseCount: 10,
       description: "a hard part",
       kind: "basic",
+    },
+    {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special"
     },
   ];
 
