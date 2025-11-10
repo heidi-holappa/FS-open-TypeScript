@@ -5,13 +5,15 @@ import axios from 'axios';
 import { apiBaseUrl } from '../../constants';
 import { Box, Typography, List, ListItem } from '@mui/material';
 
-import { Patient } from '../../types';
+import { Patient, Diagnosis } from '../../types';
 
 
 const PatientPage = () => {
     const { id } = useParams<{ id: string}>();
     const [patient, setPatient] = useState<Patient | null>(null);
+    const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [diagnosisErrorMsg, setDiagnosisErrorMsg] = useState<string | null>(null);
 
 
     useEffect(() => {
@@ -27,10 +29,25 @@ const PatientPage = () => {
         void fetchPatient();
     }, [id]);
 
+    
+    useEffect(() => {
+
+        const fetchDiagnoses = async () => {
+            try {
+                const { data } = await axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`);
+                setDiagnoses(data);
+            } catch (error) {
+                setDiagnosisErrorMsg(`Failed to fetch diagnosis names. Error: ${error}`);
+            }
+        };
+        void fetchDiagnoses();
+    }, []);
+
 
     if (errorMsg) {
         return <Typography color='error'>{errorMsg}</Typography>;
     }
+
 
     if (!patient) {
         return <Typography>Loading data (maybe Spinner here?)... </Typography>;
@@ -44,15 +61,17 @@ const PatientPage = () => {
             <Typography>Occupation: {patient.occupation}</Typography>
 
             <Typography variant="h5">Entries</Typography>
-            {patient.entries && patient.entries.length > 0 ? (
+            {patient.entries && patient.entries.length > 0 && diagnoses ? (
 
                 patient.entries.map((entry) => (
                     <div key={entry.id}>
                         <Typography>{entry.date} <i>{entry.description}</i></Typography>
                         {entry.diagnosisCodes ? (
                             <ul>
-                                {entry.diagnosisCodes.map((code) => (
-                                    <li key={code}>{code}</li>))}
+                                {entry.diagnosisCodes.map((code) => {
+                                    const name = diagnoses?.find(d => d.code === code)?.name;
+                                    return <li key={code}>{code}{name ? ` ${name}` : ''}</li>;
+                                })}
                             </ul>
                         ) : null}
                     </div>
