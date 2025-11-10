@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from 'axios';
 
 import { apiBaseUrl } from '../../constants';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, List, ListItem } from '@mui/material';
 
 import { Patient } from '../../types';
 
@@ -38,10 +38,28 @@ const PatientPage = () => {
 
     return (
         <Box>
-            <Typography variant="h5">{patient.name}</Typography>
+            <Typography variant="h5" style={{ marginTop: 16 }}>{patient.name}</Typography>
             <Typography>Gender: {patient.gender}</Typography>
             <Typography>SSN: {patient.ssn}</Typography>
             <Typography>Occupation: {patient.occupation}</Typography>
+
+            <Typography variant="h5">Entries</Typography>
+            {patient.entries && patient.entries.length > 0 ? (
+
+                patient.entries.map((entry) => (
+                    <div key={entry.id}>
+                        <Typography>{entry.date} <i>{entry.description}</i></Typography>
+                        {entry.diagnosisCodes ? (
+                            <ul>
+                                {entry.diagnosisCodes.map((code) => (
+                                    <li key={code}>{code}</li>))}
+                            </ul>
+                        ) : null}
+                    </div>
+                ))
+            ) : (
+                <Typography>No entries</Typography>
+            )}
         </Box>
     );
 };
