@@ -11,6 +11,7 @@ const App = () => {
   const [visibility, setNewVisibility] = useState('');
   const [comment, setNewComment] = useState('');
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [errorMessage, setErrorMessage] = useState <string | null>(null);
 
     useEffect(() => {
       getAllDiaries().then(data => {
@@ -19,16 +20,28 @@ const App = () => {
     }, [])
 
     
-    const entryCreation = (event: React.SyntheticEvent) => {
+    const entryCreation = async (event: React.SyntheticEvent) => {
       event.preventDefault()
-      createDiaryEntry({ date: date, visibility: visibility, weather: weather, comment: comment }).then(data => {
-        setEntries(entries.concat(data))
-      })
+      
+      try {
+        await createDiaryEntry({ date: date, visibility: visibility, weather: weather, comment: comment }).then(data => {
+          setEntries(entries.concat(data));
+        });
 
-      setNewDate('');
-      setNewWeather('');
-      setNewVisibility('');
-      setNewComment('');
+        setNewDate('');
+        setNewWeather('');
+        setNewVisibility('');
+        setNewComment('');
+        setErrorMessage(null);
+        
+      } catch (error) {
+        if (error instanceof Error) {
+          setErrorMessage(`${error.message}`);
+        } else {
+          setErrorMessage(`Unknown server error, please contant administration`);
+        }
+        
+      }
       
     }
 
@@ -36,6 +49,9 @@ const App = () => {
     <div>
       <h1>Diary</h1>
       <div>
+        {errorMessage && (
+            <div style={{color: 'red'}}>{errorMessage}</div>
+          )}
         <form onSubmit={entryCreation}>
           <div>
             <label>Date:</label>
