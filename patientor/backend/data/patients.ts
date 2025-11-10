@@ -2,7 +2,7 @@ import { PatientEntry } from "../src/types";
 
 const data: PatientEntry[] = [
     {
-        "id": "d2773336-f723-11e9-8f0b-362b9e155667",
+        "id": "8be73978-2080-41b9-ae81-0e8e50bb4ef1",
         "name": "John McClane",
         "dateOfBirth": "1986-07-09",
         "ssn": "090786-122X",
@@ -10,7 +10,7 @@ const data: PatientEntry[] = [
         "occupation": "New york city cop"
     },
     {
-        "id": "d2773598-f723-11e9-8f0b-362b9e155667",
+        "id": "1d22529a-a9da-468e-90d8-7ab8c796bc68",
         "name": "Martin Riggs",
         "dateOfBirth": "1979-01-30",
         "ssn": "300179-77A",
@@ -18,7 +18,7 @@ const data: PatientEntry[] = [
         "occupation": "Cop"
     },
     {
-        "id": "d27736ec-f723-11e9-8f0b-362b9e155667",
+        "id": "0c8f379f-a0c1-44dc-aa9e-b52f6b40acff",
         "name": "Hans Gruber",
         "dateOfBirth": "1970-04-25",
         "ssn": "250470-555L",
@@ -26,7 +26,7 @@ const data: PatientEntry[] = [
         "occupation": "Technician"
     },
     {
-        "id": "d2773822-f723-11e9-8f0b-362b9e155667",
+        "id": "982a1376-0304-488b-95fb-e591b36abfe8",
         "name": "Dana Scully",
         "dateOfBirth": "1974-01-05",
         "ssn": "050174-432N",
