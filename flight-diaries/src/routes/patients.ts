@@ -11,6 +11,16 @@ router.get('/', (_reg, res: Response<NonSensitivePatientEntry[]>) =>{
     res.send(patientService.getNonSensitiveEntries());
 });
 
+router.get('/:id', (req: Request<{ id: string }>, res: Response<PatientEntry>) => {
+    const patient = patientService.getEntries(req.params.id);
+    if (patient) {
+        res.send({ ...patient, entries: patient.entries ?? [] });
+    } else {
+        res.sendStatus(404);
+    }
+});
+
+
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => { 
   try {
     NewPatientEntrySchema.parse(req.body);
