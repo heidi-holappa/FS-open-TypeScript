@@ -3,7 +3,6 @@ import type { DiaryEntry } from './types';
 import { getAllDiaries, createDiaryEntry } from './service/diaryService';
 
 
-
 const App = () => {
 
   const [date, setNewDate] = useState('');
@@ -13,37 +12,42 @@ const App = () => {
   const [entries, setEntries] = useState<DiaryEntry[]>([]);
   const [errorMessage, setErrorMessage] = useState <string | null>(null);
 
-    useEffect(() => {
-      getAllDiaries().then(data => {
-        setEntries(data)
-      })
-    }, [])
-
+   // lists for radio options
+  const visibilityOptions = ['great', 'good', 'ok', 'poor'];
+  const weatherOptions = ['sunny', 'rainy', 'cloudy', 'stormy', 'windy'];
     
-    const entryCreation = async (event: React.SyntheticEvent) => {
-      event.preventDefault()
-      
-      try {
-        await createDiaryEntry({ date: date, visibility: visibility, weather: weather, comment: comment }).then(data => {
-          setEntries(entries.concat(data));
-        });
 
-        setNewDate('');
-        setNewWeather('');
-        setNewVisibility('');
-        setNewComment('');
-        setErrorMessage(null);
-        
-      } catch (error) {
-        if (error instanceof Error) {
-          setErrorMessage(`${error.message}`);
-        } else {
-          setErrorMessage(`Unknown server error, please contant administration`);
-        }
-        
+  useEffect(() => {
+    getAllDiaries().then(data => {
+      setEntries(data)
+    })
+  }, [])
+
+  
+  const entryCreation = async (event: React.SyntheticEvent) => {
+    event.preventDefault()
+    
+    try {
+      await createDiaryEntry({ date: date, visibility: visibility, weather: weather, comment: comment }).then(data => {
+        setEntries(entries.concat(data));
+      });
+
+      setNewDate('');
+      setNewWeather('');
+      setNewVisibility('');
+      setNewComment('');
+      setErrorMessage(null);
+      
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(`${error.message}`);
+      } else {
+        setErrorMessage(`Unknown server error, please contant administration`);
       }
       
     }
+    
+  }
 
   return (
     <div>
@@ -56,23 +60,41 @@ const App = () => {
           <div>
             <label>Date:</label>
             <input
+              type="date" 
               value={date}
               onChange={(event) => setNewDate(event.target.value)} 
             />
           </div>
           <div>
-            <label>Visibility:</label>
-            <input
-              value={visibility}
-              onChange={(event) => setNewVisibility(event.target.value)} 
-            />
+            {visibilityOptions.map(option => (
+              <label key={option} style={{ marginRight: 8 }}>
+                <input
+                  type="radio"
+                  name="visibility"
+                  value={option}
+                  checked={visibility === option}
+                  onChange={(e) => setNewVisibility(e.target.value)}
+                />
+                {option}
+              </label>
+            ))}
           </div>
           <div>
             <label>Weather:</label>
-            <input
-              value={weather}
-              onChange={(event) => setNewWeather(event.target.value)} 
-            />
+            <div>
+              {weatherOptions.map(option => (
+                <label key={option} style={{ marginRight: 8 }}>
+                  <input
+                    type="radio"
+                    name="weather"
+                    value={option}
+                    checked={weather === option}
+                    onChange={(e) => setNewWeather(e.target.value)}
+                  />
+                  {option}
+                </label>
+                ))}
+              </div>
           </div>
           <div>
             <label>Comment:</label>
