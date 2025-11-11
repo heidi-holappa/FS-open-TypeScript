@@ -1,11 +1,17 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import WorkIcon from '@mui/icons-material/Work';
 
 import { apiBaseUrl } from '../../constants';
 import { Box, Typography, List, ListItem } from '@mui/material';
 
-import { Patient, Diagnosis } from '../../types';
+import { Patient, Diagnosis, Entry } from '../../types';
+
+
 
 
 const PatientPage = () => {
@@ -44,8 +50,57 @@ const PatientPage = () => {
     }, []);
 
 
+    const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
+    const common = <div key={entry.id}>
+                        <Typography><i>{entry.description}</i></Typography>
+                        {entry.diagnosisCodes ? (
+                            <ul>
+                                {entry.diagnosisCodes.map((code) => {
+                                    const name = diagnoses?.find(d => d.code === code)?.name;
+                                    return <li key={code}>{code}{name ? ` ${name}` : ''}</li>;
+                                })}
+                            </ul>
+                        ) : null}
+                        Diagnosis by {entry.specialist}
+                    </div>;
+    
+    
+        switch (entry.type) {
+            case "Hospital":
+                return (
+                <div>
+                    <Typography>{entry.date} {<LocalHospitalIcon />}</Typography>
+                    {common}
+                </div>
+            );
+            case "OccupationalHealthcare":
+                return (
+                <div>
+                    <Typography>{entry.date} {<WorkIcon />} {entry.employerName}</Typography>
+                    {common}
+                </div>
+            );
+            case "HealthCheck":
+                return (
+                <div>
+                    <Typography>{entry.date} {<MedicalServicesIcon />}</Typography>
+                    {common}
+                </div>
+            );
+            default:
+                return <div>Unknown Entry</div>;
+        }
+
+    };
+
+
+
     if (errorMsg) {
         return <Typography color='error'>{errorMsg}</Typography>;
+    }
+
+    if (diagnosisErrorMsg) {
+        return <Typography color='error'>{diagnosisErrorMsg}</Typography>;
     }
 
 
@@ -61,24 +116,16 @@ const PatientPage = () => {
             <Typography>Occupation: {patient.occupation}</Typography>
 
             <Typography variant="h5">Entries</Typography>
-            {patient.entries && patient.entries.length > 0 && diagnoses ? (
-
-                patient.entries.map((entry) => (
-                    <div key={entry.id}>
-                        <Typography>{entry.date} <i>{entry.description}</i></Typography>
-                        {entry.diagnosisCodes ? (
-                            <ul>
-                                {entry.diagnosisCodes.map((code) => {
-                                    const name = diagnoses?.find(d => d.code === code)?.name;
-                                    return <li key={code}>{code}{name ? ` ${name}` : ''}</li>;
-                                })}
-                            </ul>
-                        ) : null}
-                    </div>
-                ))
-            ) : (
-                <Typography>No entries</Typography>
-            )}
+            
+                {patient.entries && patient.entries.length > 0 && diagnoses ? (
+                    patient.entries.map((entry) => (
+                        <Box sx={{ border: 1, m: 2 }}>
+                            <EntryDetails entry={ entry } />
+                        </Box>
+                    ))
+                ) : (
+                    <Typography>No entries</Typography>
+                )}
         </Box>
     );
 };
